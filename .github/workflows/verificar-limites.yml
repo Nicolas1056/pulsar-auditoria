@@ -1,7 +1,8 @@
 name: Verificar límites de GitHub
 
 # GitHub rechaza ficheros de más de 100 MB y avisa a partir de 50 MB.
-# Este workflow falla si alguien vuelve a meter artefactos grandes.
+# Este workflow falla si alguien vuelve a meter artefactos grandes
+# o credenciales en el árbol.
 
 on:
   push:
@@ -34,11 +35,22 @@ jobs:
             echo "$MEDIOS" | awk -F'\t' '{printf "  %.0f MB  %s\n", $1/1048576, $2}'
           fi
 
+      # NOTA: no usar `grep ... | head` dentro de un if. El exit status de un
+      # pipe es el del ÚLTIMO comando, y `head` siempre devuelve 0, así que la
+      # condición sería siempre verdadera. Se captura la salida en una variable
+      # y se comprueba si está vacía.
       - name: Comprobar que no se cuelan secretos evidentes
         run: |
-          if grep -rInE 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}' \
-               --exclude-dir=.git --exclude-dir=rea . 2>/dev/null | head -5; then
-            echo "::error::Posible credencial en el árbol."
+          HALLAZGOS=$(grep -rInE \
+              -e 'ghp_[A-Za-z0-9]{20,}' \
+              -e 'github_pat_[A-Za-z0-9_]{20,}' \
+              -e 'AKIA[0-9A-Z]{16}' \
+              -e '-----BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY-----' \
+              --exclude-dir=.git --exclude-dir=rea . 2>/dev/null || true)
+
+          if [ -n "$HALLAZGOS" ]; then
+            echo "::error::Posible credencial en el árbol:"
+            echo "$HALLAZGOS" | sed 's/\(.\{160\}\).*/\1…/'
             exit 1
           fi
           echo "OK: sin credenciales evidentes."
