@@ -39,7 +39,7 @@ Análisis estático independiente de **Pulsar Launcher 0.2.26-beta** (launcher y
 
 | Documento | Contenido |
 |---|---|
-| [`docs/minecraft-1.8.9/01-informe-remap-y-mixins.md`](docs/minecraft-1.8.9/01-informe-remap-y-mixins.md) | Descarga verificada del `client.jar`, remapeo Searge→MCP, y verificación de los **289 hooks / 81 targets** contra el bytecode real |
+| [`docs/minecraft-1.8.9/01-informe-remap-y-mixins.md`](docs/minecraft-1.8.9/01-informe-remap-y-mixins.md) | Descarga verificada del `client.jar`, remapeo Searge→MCP, y verificación de los **290 hooks / 81 targets** contra el bytecode real |
 
 ### Legal
 
@@ -142,17 +142,71 @@ Verificado en negativo sobre los binarios de Windows: sin cifrado de archivos, s
 
 ## Estructura del repositorio
 
+Dos productos distintos viven en este repo. Confundirlos cambia por completo el análisis, así que van separados por color:
+
+- 🔵 **PULSAR** — el launcher y el cliente de terceros (metrofico). Es el objeto de la auditoría.
+- 🟠 **MINECRAFT** — el juego oficial de Mojang que Pulsar ejecuta. **No es objeto de auditoría**, es el material de referencia contra el que se verifica el mod.
+- ⚪ **HERRAMIENTAS** — utillaje y evidencia.
+
+### 🔵 Código de Pulsar
+
+| Ruta | Qué es | Volumen |
+|---|---|---|
+| `jadx-out/daemon-src/` | **Daemon Java 25**: los 53 comandos, auth, métricas, updates, emotes. El proceso que habla con la UI | 34 `.java` |
+| `jadx-out/src-launcher/` | **Lanzador de Minecraft**: metadata de Mojang, librerías, runtimes Java, argumentos de arranque | 53 `.java` |
+| `jadx-out/src-bootstrap/` | **Arranque del cliente**: `GameClassLoader`, Mixin, `BootSeal`, `SelfGuard`, `ClassWatch` | 24 `.java` |
+| `jadx-out/src-engine-api/` | **API del cliente**: HUD, emotes, packs, cámara… y **todo el módulo `legit`** (15 clases) | 186 `.java` |
+| `jadx-out/src-v189/` | **Implementación para Minecraft 1.8.9**: los 102 mixins y el motor | 194 `.java` |
+| `jadx-out/src-v26x/` | **Implementación para Minecraft moderno** | 148 `.java` |
+| `win-extracted/{app}/` | **Binarios Windows extraídos** del instalador + `install_script.iss` | 647 MB |
+| `dist/linux/…/` | **Binarios Linux** (tar.gz desempaquetado) | 857 MB |
+| `dist/PulsarLauncher-linux-x86_64.tar.gz` | Release Linux tal cual | ver §excluidos |
+
+> ⚠️ El módulo `legit` **no** tiene carpeta propia: está en `jadx-out/src-engine-api/com/metrofico/pulsar/api/legit/` junto con `staff/StaffXrayGate`. Ver [§legit](#el-módulo-legit-el-anticheat).
+
+### 🟠 Código de Minecraft (material de referencia, no auditado)
+
+| Ruta | Qué es | Volumen |
+|---|---|---|
+| `mc189-decompiled/` | **Minecraft 1.8.9 decompilado** con nombres MCP legibles | 1.612 `.java` |
+| `mc189/client-1.8.9.jar` | **Cliente original** de Mojang, SHA-1 verificado contra el manifiesto | 8,1 MB |
+| `mc189/client-1.8.9-mcp2.jar` | Cliente **remapeado** a nombres de clase reales | 25 MB |
+| `mc189/client-1.8.9-named.jar` | Ídem, **sin `LocalVariableTable`** (el que se descompila limpio) | — |
+| `mc189/libraries/` | 33 librerías de Mojang verificadas una a una | 15 MB |
+| `mc189/mcp/`, `mc189/mcp-srg/` | Mappings MCP: `joined.srg` + `methods.csv`/`fields.csv` | — |
+
+### ⚪ Herramientas y evidencia
+
+| Ruta | Qué es |
+|---|---|
+| `docs/` | Informes y reportes (Markdown) |
+| `evid/` | Evidencia JSON generada por REA |
+| `tools/vineflower.jar` | Decompilador |
+| `tools/innounp/` | Desempaquetador de Inno Setup |
+| `mc189/*.py`, `mc189/*.java` | Scripts propios de remapeo y verificación |
+| `rea/` | Clon de morluto/rea (excluido de git) |
+
 ```
 .
-├── docs/                     informes y reportes (fuente: Markdown)
-├── evid/                     evidencia JSON generada por REA
-├── tools/                    vineflower.jar, innoup (desempaquetador Inno Setup)
-├── win-extracted/            instalador Windows extraído + install_script.iss
-├── dist/                     binarios originales (setup.exe, tar.gz Linux)
-├── mc189/                    artefactos de Minecraft 1.8.9 + scripts de remapeo
-├── mc189-decompiled/         Minecraft 1.8.9 decompilado (nombres MCP)
-├── jadx-out/                 Pulsar decompilado (639 clases Java)
-└── rea/                      repo morluto/rea clonado (herramienta usada)
+├── docs/                     informes (win/, linux/, compliance/, minecraft-1.8.9/, legal/)
+├── evid/                     evidencia JSON de REA
+├── tools/                    vineflower.jar · innounp/
+│
+├── jadx-out/                 🔵 PULSAR decompilado (639 .java)
+│   ├── daemon-src/           └ daemon Java 25
+│   ├── src-launcher/         └ lanzador de Minecraft
+│   ├── src-bootstrap/        └ arranque + Mixin
+│   ├── src-engine-api/       └ API del cliente + módulo legit
+│   ├── src-v189/             └ engine 1.8.9 (102 mixins)
+│   └── src-v26x/             └ engine moderno
+│
+├── win-extracted/{app}/      🔵 PULSAR binarios Windows + install_script.iss
+├── dist/                     🔵 PULSAR binarios Linux
+│
+├── mc189/                    🟠 MINECRAFT 1.8.9: jar original, remapeos, mappings
+├── mc189-decompiled/         🟠 MINECRAFT 1.8.9 decompilado (1.612 .java)
+│
+└── rea/                      ⚪ herramienta (gitignored)
 ```
 
 ### Scripts propios
@@ -162,7 +216,7 @@ Verificado en negativo sobre los binarios de Windows: sin cifrado de archivos, s
 | `mc189/srg2classmapping.py` | Fusiona `joined.srg` + `methods.csv`/`fields.csv` en un mapping para ASM |
 | `mc189/RemapMinecraft.java` | Remapea el `client.jar` Searge→MCP con `ClassRemapper` |
 | `mc189/StripDebug.java` | Elimina `LocalVariableTable` ofuscada (`SKIP_DEBUG`) |
-| `mc189/verify_hooks.py` | Resuelve los 289 hooks de mixins contra el bytecode real |
+| `mc189/verify_hooks.py` | Resuelve los 290 hooks de mixins contra el bytecode real |
 | `mc189/verify_targets.py` | Resuelve los 81 `@At target`, siguiendo la jerarquía de clases |
 
 ---

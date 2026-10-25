@@ -115,10 +115,26 @@ def main():
     for path in sorted(glob.glob(os.path.join(MIXINS, '*.java'))):
         name = os.path.basename(path)[:-5]
         src = open(path, encoding='utf-8', errors='replace').read()
-        mm = re.search(r'@Mixin\(\{([^}]*)\}\)', src)
-        if not mm:
-            continue
-        targets = [x.strip().split('.')[0] for x in mm.group(1).split(',') if x.strip()]
+        # Formas de @Mixin:
+        #   @Mixin({A.class, B.class})      -> forma corta (la mayoria)
+        #   @Mixin(value = {A.class})       -> forma larga con atributo
+        #   @Mixin(targets = {"bfr$a"})     -> acceso a clase interna (Accessor)
+        mm = re.search(r'@Mixin\(\s*\{([^}]*)\}\s*\)', src)
+        if mm:
+            listed = mm.group(1)
+        else:
+            mm = re.search(r'@Mixin\s*\((?:[^)]*?)(?:value|targets)\s*=\s*\{([^}]*)\}', src, re.S)
+            if not mm:
+                continue
+            listed = mm.group(1)
+        targets = []
+        for x in listed.split(','):
+            t = x.strip().strip('"').strip()
+            if not t:
+                continue
+            if t.endswith('.class'):        # Epoll.class -> Epoll (fuera del jar de MC)
+                t = t[:-6]
+            targets.append(t.split('.')[0])
         present = [t for t in targets if t in methods_obf]
         stats['mixins'] += 1
         stats['mixin_class_ok'] += bool(present)

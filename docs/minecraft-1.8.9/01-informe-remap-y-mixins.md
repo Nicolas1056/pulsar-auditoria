@@ -81,15 +81,15 @@ var1.f(var2);                  var1.f(var2);
 
 | Métrica | Valor |
 |---|---|
-| Mixins declarados | **100** |
-| Clases `@Mixin` encontradas en el jar | **100 / 100** |
-| Hooks `@Inject/@Redirect/ModifyArg/ModifyVariable/@Overwrite` | **289** |
-| Hooks cuyo método objetivo existe en el bytecode | **289 / 289** |
-| Accessors/Invokers | **47** |
+| Mixins declarados | **102** |
+| Clases `@Mixin` encontradas en el jar de MC | **101 / 102** (la restante, `EpollMixin`, apunta a `io.netty.channel.epoll.Epoll`) |
+| Hooks `@Inject/@Redirect/ModifyArg/ModifyVariable/@Overwrite` | **290** |
+| Hooks cuyo método objetivo existe en el bytecode | **289 / 290** (el restante, `EpollMixin`, apunta a Netty) |
+| Accessors/Invokers | **51** |
 | `@At target` totales | 99 |
 | — en clases del jar de MC | 81 → **81 resueltos** (4 por herencia) |
 | — en LWJGL/JDK/Guava (fuera del jar) | 18 (no comprobables aquí) |
-| Clases de Minecraft instrumentadas | **73** |
+| Clases de Minecraft instrumentadas | **75** |
 
 Scripts: `mc189/verify_hooks.py` → `hooks-report.txt`, `mc189/verify_targets.py` → `targets-report.txt`.
 

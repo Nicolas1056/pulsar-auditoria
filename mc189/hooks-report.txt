@@ -62,6 +62,7 @@ EntityRendererMixin                biv       a(Lpk;DDD)V            renderName  
 EntityRendererMixin                biv       a(Lpk;DDD)V            renderName                 SÍ
 EntityRendererMixin                biv       a(Lpk;Ljava/lang/String;DDDI)V renderLivingLabel          SÍ
 EntityRendererMixin                biv       a(Lpk;Ljava/lang/String;DDDI)V renderLivingLabel          SÍ
+EpollMixin                         Epoll     isAvailable                                       NO
 FirstPersonItemMixin               bfn       a(F)V                  renderItemInFirstPerson    SÍ
 FirstPersonItemMixin               bfn       a(F)V                  renderItemInFirstPerson    SÍ
 FirstPersonItemMixin               bfn       a(F)V                  renderItemInFirstPerson    SÍ
@@ -290,13 +291,16 @@ WorldRendererMixin                 bfr       a(Lpk;DLbia;IZ)V       setupTerrain
 WorldRendererMixin                 bfr       a(Lpk;Lbia;F)V         renderEntities             SÍ
 
 --- resumen ---
-mixins          : 100
-mixin_class_ok  : 100
-hooks           : 289
+mixins          : 102
+mixin_class_ok  : 101
+hooks           : 290
 hook_resolved   : 289
-accessors       : 47
+accessors       : 51
 at_target       : 99
 at_target_ok    : 81
-clases MC destino distintas: 73
+clases MC destino distintas: 75
 
 top clases instrumentadas: [('Minecraft', 8), ('GuiIngame', 4), ('EntityRenderer', 3), ('RenderGlobal', 3), ('ChunkRenderContainer', 2), ('LayerArmorBase', 2), ('ModelBiped', 2), ('WorldRenderer', 2), ('ViewFrustum', 2), ('ChunkRenderDispatcher', 2)]
+
+NO resueltos:
+   ('EpollMixin', 'Epoll', ['isAvailable'], 'Inject')
