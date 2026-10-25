@@ -21,6 +21,7 @@ Análisis estático independiente de **Pulsar Launcher 0.2.26-beta** (launcher y
 |---|---|
 | [`docs/win/01-informe-launcher.md`](docs/win/01-informe-launcher.md) | Arquitectura completa: CEF 151 + shell C++ + daemon Java 25 + cliente Minecraft con Mixin. 53 comandos del daemon, endpoints, autenticación, actualizaciones, módulo `legit` |
 | [`docs/win/02-privacidad-y-seguridad.md`](docs/win/02-privacidad-y-seguridad.md) | Privacidad y seguridad real en Windows: fuga del refresh token por línea de comandos, `RIDEV_INPUTSINK`, escritura en registro, mitigaciones ausentes, ranking de telemetría, veredicto |
+| [`docs/win/03-modulo-legit.md`](docs/win/03-modulo-legit.md) | Anatomía completa del "anticheat": arquitectura de tres canales, challenge-response, los tres sensores, `ClickCap`, `ProbeEngine`, `SelfGuard`, `StaffXrayGate` y análisis de consentimiento |
 
 ### Linux (comparativa)
 
@@ -54,7 +55,8 @@ Análisis estático independiente de **Pulsar Launcher 0.2.26-beta** (launcher y
 |---|---|---|---|
 | 1 | El **refresh token de Microsoft** se pasa como argumento `-Command` a `powershell.exe`, legible por cualquier proceso del usuario | 🔴 Crítico | [win/02](docs/win/02-privacidad-y-seguridad.md#1--crítico--el-refresh-token-viaja-en-la-línea-de-comandos) |
 | 2 | Falta el disclaimer obligatorio **"NOT AN OFFICIAL MINECRAFT PRODUCT…"** | ❌ Incumple | [compliance/01](docs/compliance/01-eula-y-usage-guidelines.md#5--falta-el-disclaimer-obligatorio--incumple) |
-| 3 | El módulo `legit` verifica acceso *out-of-game* y altera funciones *in-game* (capado de CPS, denegación de entrada) | ❌ Incumple | [compliance/01](docs/compliance/01-eula-y-usage-guidelines.md#6--el-módulo-legit--incumple) |
+| 3 | El módulo `legit` verifica acceso *out-of-game* y altera funciones *in-game* (capado de CPS, denegación de entrada) | ❌ Incumple | [compliance/01](docs/compliance/01-eula-y-usage-guidelines.md#6--el-módulo-legit--incumple) · [win/03](docs/win/03-modulo-legit.md) |
+| 3b | **`SignalsChoice.mandatory()` está hardcodeado**: no existe ruta de código para que el jugador rechace compartir los sensores | 🔴 Crítico | [win/03](docs/win/03-modulo-legit.md#4--el-jugador-no-puede-rechazar-los-sensores) |
 | 4 | Ratón crudo con `RIDEV_INPUTSINK`: recibe eventos **sin foco de ventana** | 🟠 Medio | [win/02](docs/win/02-privacidad-y-seguridad.md#2--ridev_inputsink--el-ratón-se-lee-sin-foco) |
 | 5 | Escribe `HKCU\…\UserGpuPreferences` por defecto vía `reg.exe add /f` | 🟠 Medio | [win/02](docs/win/02-privacidad-y-seguridad.md#3--modifica-el-registro-de-windows) |
 | 6 | Sin firma Authenticode **ni Control Flow Guard**; `libcef.dll` tampoco firmada | 🟠 Medio | [win/02](docs/win/02-privacidad-y-seguridad.md#4--endurecimiento-ausente-en-los-ejecutables) |
