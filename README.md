@@ -49,14 +49,84 @@ Análisis estático independiente de **Pulsar Launcher 0.2.26-beta** (launcher y
 
 ---
 
+## El módulo `legit`: el "anticheat"
+
+Es el componente central del launcher y el que más consecuencias tiene para el jugador: **1.706 líneas en 15 clases** más 6 en `bootstrap/legit`. Análisis completo en **[`docs/win/03-modulo-legit.md`](docs/win/03-modulo-legit.md)**.
+
+### Cómo funciona
+
+No es un anticheat del servidor: es un **notario criptográfico de cliente**. El servidor de Minecraft pregunta, Pulsar firma la respuesta, y el servidor decide. Pulsar no juzga.
+
+El canal por el que llega el challenge es **plugin messaging de Minecraft** (`pulsar:v1`), el mismo mecanismo que usan los plugins de Spigot: **no hace falta infraestructura de Pulsar para preguntar**, solo para firmar.
+
+```
+Servidor MC ──legit.challenge {nonce, sensors, cpsCap}──▶ Cliente Pulsar
+                                                              │
+                                            WSS rt.pulsarlauncher.com (firma)
+                                                              ▼
+Servidor MC ◀──legit.attestation {token | error}──────────────┘
+```
+
+### Qué recoge
+
+| Sensor | Qué mide | Cómo detecta trampas |
+|---|---|---|
+| `ClickSensor` | intervalos entre clics (80 buckets de 5 ms), duración de pulsación, `cpsMax` | **6 intervalos consecutivos repetidos con ±2 ms**: un humano no lo produce, un autoclicker sí |
+| `AimSensor` | media y varianza de Δyaw/Δpitch por tick (Welford) | ***snap***: giro >30° seguido de movimiento <0,001° (corrección instantánea a la cabeza) |
+| `ReachSensor` | distancia ojo→AABB en 160 buckets de 0,05 | **`p50` y `p95`**: un reach hack desplaza la distribución entera |
+| `ProbeEngine` | `SHA-256(salt ‖ bytes)` de clases y rangos de JAR | challenge-response con **salt aleatorio del servidor** (no precalculable) |
+| `SelfGuard` | clases desconocidas/redefinidas, agentes JVM, `TracerPid`/`IsDebuggerPresent`, módulos con SHA-256 + firma | detecta mods inyectados y depuradores; cada **5 s** |
+| `BootSeal` | `bootHash` de todos los JARs, `mojangSha1`, argumentos JVM inyectores | raíz de confianza en el arranque |
+
+### Qué **hace** al jugador
+
+`ClickCap` es el único componente que **muta el juego en tiempo real**: si el servidor manda `cpsCap: 8` y haces 12 CPS, **el cliente se come 4 clics**. Se aplica en el mixin antes de `Minecraft.clickMouse()`, así que el juego nunca los ve — y se aplica en `EntryPass.respond()` **antes de cualquier validación**, de modo que el cap queda puesto incluso si la atestación acaba fallando.
+
+### Incumplimientos y riesgos
+
+| # | Punto | Severidad | Detalle |
+|---|---|---|---|
+| L1 | Verifica acceso *out-of-game* y altera funciones *in-game* (capado de CPS, denegación de entrada) | ❌ **Incumple** Usage Guidelines §"Extended functionality" | [compliance/01](docs/compliance/01-eula-y-usage-guidelines.md#6--el-módulo-legit--incumple) |
+| L2 | **El jugador no puede negarse**: `SignalsChoice.mandatory()` está hardcodeado en `PackClient` | 🔴 Crítico | [win/03 §4](docs/win/03-modulo-legit.md#4--el-jugador-no-puede-rechazar-los-sensores) |
+| L3 | Silenciar los sensores **no se comunica al servidor**: el token se envía igual, el servidor cree que tiene datos | 🟠 Alto | [win/03 §4](docs/win/03-modulo-legit.md#4--el-jugador-no-puede-rechazar-los-sensores) |
+| L4 | Telemetría conductual obligatoria: patrón de clics (80 buckets) y de apuntado (varianza por tick) = firma biométrica | 🟠 Alto | [win/02 §7](docs/win/02-privacidad-y-seguridad.md#7-ranking-de-telemetría--específico-de-windows) |
+| L5 | Inventario de DLLs con SHA-256 y verificación de firma WinTrust, cada 5 s | 🟠 Medio | [win/03 §7](docs/win/03-modulo-legit.md#7-selfguard-y-guard--lo-que-se-envía-cada-5-segundos) |
+| L6 | `StaffXrayGate` permite al staff ocultar bloques; el diseño es sólido (doble firma) pero concentra riesgo en la clave privada de Pulsar | 🟡 Bajo | [win/03 §8](docs/win/03-modulo-legit.md#8-staffxraygate--el-control-de-moderación) |
+
+### Detalle sobre L2: la interfaz de consentimiento existe y no se usa
+
+```java
+// PackClient.java:64 — constante, no configurable
+private final SignalsChoice signalsChoice = SignalsChoice.mandatory();
+
+// SignalsChoice.java — devuelve siempre lo que el servidor pidió
+static SignalsChoice mandatory() {
+   return (serverId, requested) -> CompletableFuture.completedFuture(requested);
+}
+```
+
+Existen la interfaz `SignalsChoice`, la rama `declined_sensors` y hasta una factoría `EntryPass.sharing(Predicate)`. **Nadie las cablea**: es una abstracción preparada para un diálogo de consentimiento que nunca se implementó.
+
+### Cómo desactivarlo
+
+| Nivel | Método | Efecto real |
+|---|---|---|
+| Total | `-Dpulsar.legit=off` | sin sesión, sin sensores, sin probes |
+| Sensores | `"legit.sensors": false` en `client-options.json` | los sensores no registran, **pero el token y el `ClickCap` siguen activos** |
+| Sesión | jugar sin cuenta de Pulsar | el handshake anuncia `legit=false` |
+| Servidor | que no lo pida | sin `legit.challenge` no hay nada |
+
+---
+
 ## Hallazgos principales
 
 | # | Hallazgo | Severidad | Documento |
 |---|---|---|---|
 | 1 | El **refresh token de Microsoft** se pasa como argumento `-Command` a `powershell.exe`, legible por cualquier proceso del usuario | 🔴 Crítico | [win/02](docs/win/02-privacidad-y-seguridad.md#1--crítico--el-refresh-token-viaja-en-la-línea-de-comandos) |
 | 2 | Falta el disclaimer obligatorio **"NOT AN OFFICIAL MINECRAFT PRODUCT…"** | ❌ Incumple | [compliance/01](docs/compliance/01-eula-y-usage-guidelines.md#5--falta-el-disclaimer-obligatorio--incumple) |
-| 3 | El módulo `legit` verifica acceso *out-of-game* y altera funciones *in-game* (capado de CPS, denegación de entrada) | ❌ Incumple | [compliance/01](docs/compliance/01-eula-y-usage-guidelines.md#6--el-módulo-legit--incumple) · [win/03](docs/win/03-modulo-legit.md) |
-| 3b | **`SignalsChoice.mandatory()` está hardcodeado**: no existe ruta de código para que el jugador rechace compartir los sensores | 🔴 Crítico | [win/03](docs/win/03-modulo-legit.md#4--el-jugador-no-puede-rechazar-los-sensores) |
+| 3 | El módulo `legit` verifica acceso *out-of-game* y altera funciones *in-game* (capado de CPS, denegación de entrada) | ❌ Incumple | [ver §legit](#el-módulo-legit-el-anticheat) · [compliance/01](docs/compliance/01-eula-y-usage-guidelines.md#6--el-módulo-legit--incumple) |
+| 3b | **`SignalsChoice.mandatory()` está hardcodeado**: no existe ruta de código para que el jugador rechace compartir los sensores | 🔴 Crítico | [ver §legit](#detalle-sobre-l2-la-interfaz-de-consentimiento-existe-y-no-se-usa) · [win/03](docs/win/03-modulo-legit.md#4--el-jugador-no-puede-rechazar-los-sensores) |
+| 3c | Los sensores conductuales (clics, apuntado) son **firma biométrica** enviada a un tercero sin consentimiento posible | 🟠 Alto | [ver §legit](#incumplimientos-y-riesgos) · [win/02](docs/win/02-privacidad-y-seguridad.md#7-ranking-de-telemetría--específico-de-windows) |
 | 4 | Ratón crudo con `RIDEV_INPUTSINK`: recibe eventos **sin foco de ventana** | 🟠 Medio | [win/02](docs/win/02-privacidad-y-seguridad.md#2--ridev_inputsink--el-ratón-se-lee-sin-foco) |
 | 5 | Escribe `HKCU\…\UserGpuPreferences` por defecto vía `reg.exe add /f` | 🟠 Medio | [win/02](docs/win/02-privacidad-y-seguridad.md#3--modifica-el-registro-de-windows) |
 | 6 | Sin firma Authenticode **ni Control Flow Guard**; `libcef.dll` tampoco firmada | 🟠 Medio | [win/02](docs/win/02-privacidad-y-seguridad.md#4--endurecimiento-ausente-en-los-ejecutables) |
