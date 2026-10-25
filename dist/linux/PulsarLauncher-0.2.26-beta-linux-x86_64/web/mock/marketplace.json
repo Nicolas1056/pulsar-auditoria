@@ -1,0 +1,363 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-22T18:00:00Z",
+  "categories": [
+    {
+      "id": "capes",
+      "name": "Capas"
+    },
+    {
+      "id": "cosmetics",
+      "name": "Cosméticos"
+    },
+    {
+      "id": "packs",
+      "name": "Paquetes"
+    },
+    {
+      "id": "capsules",
+      "name": "Cápsulas"
+    },
+    {
+      "id": "worlds",
+      "name": "Mundos"
+    }
+  ],
+  "items": [
+    {
+      "id": "item-01-capa-aurora",
+      "type": "cape",
+      "name": "Capa Aurora",
+      "author": "Pulsar Studio",
+      "category": "capes",
+      "image": {
+        "src": "art/item-1.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Capa Aurora",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": true
+      },
+      "tags": [
+        "capa",
+        "animada"
+      ],
+      "description": "Capa Aurora: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 1457,
+      "rating": 4.3,
+      "updatedAt": "2026-08-11T10:00:00Z",
+      "versions": []
+    },
+    {
+      "id": "item-02-capa-carbon",
+      "type": "cape",
+      "name": "Capa Carbón",
+      "author": "Pulsar Studio",
+      "category": "capes",
+      "image": {
+        "src": "art/item-2.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Capa Carbón",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 2.99,
+        "currency": "USD"
+      },
+      "tags": [
+        "capa"
+      ],
+      "description": "Capa Carbón: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 2794,
+      "rating": 3.6,
+      "updatedAt": "2026-08-12T10:00:00Z",
+      "versions": []
+    },
+    {
+      "id": "item-03-alas-de-cuarzo",
+      "type": "cosmetic",
+      "name": "Alas de cuarzo",
+      "author": "Nébula",
+      "category": "cosmetics",
+      "image": {
+        "src": "art/item-3.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Alas de cuarzo",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 4.99,
+        "currency": "USD"
+      },
+      "tags": [
+        "alas",
+        "brillo"
+      ],
+      "description": "Alas de cuarzo: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 4131,
+      "rating": 4.3,
+      "updatedAt": "2026-08-13T10:00:00Z",
+      "versions": [
+        "26.2"
+      ]
+    },
+    {
+      "id": "item-04-sombrero-de-bloque",
+      "type": "cosmetic",
+      "name": "Sombrero de bloque",
+      "author": "Comunidad",
+      "category": "cosmetics",
+      "image": {
+        "src": "art/item-4.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Sombrero de bloque",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": true
+      },
+      "tags": [
+        "sombrero"
+      ],
+      "description": "Sombrero de bloque: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 5468,
+      "rating": 3.6,
+      "updatedAt": "2026-08-14T10:00:00Z",
+      "versions": []
+    },
+    {
+      "id": "item-05-paquete-pradera",
+      "type": "pack",
+      "name": "Paquete Pradera",
+      "author": "Verdea",
+      "category": "packs",
+      "image": {
+        "src": "art/item-5.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Paquete Pradera",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 3.49,
+        "currency": "USD"
+      },
+      "tags": [
+        "texturas",
+        "16x"
+      ],
+      "description": "Paquete Pradera: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 6805,
+      "rating": 4.3,
+      "updatedAt": "2026-08-15T10:00:00Z",
+      "versions": []
+    },
+    {
+      "id": "item-06-paquete-noche",
+      "type": "pack",
+      "name": "Paquete Noche",
+      "author": "Verdea",
+      "category": "packs",
+      "image": {
+        "src": "art/item-6.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Paquete Noche",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 3.49,
+        "currency": "USD"
+      },
+      "tags": [
+        "texturas",
+        "oscuro"
+      ],
+      "description": "Paquete Noche: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 8142,
+      "rating": 3.6,
+      "updatedAt": "2026-08-16T10:00:00Z",
+      "versions": [
+        "26.2"
+      ]
+    },
+    {
+      "id": "item-07-capsula-estival",
+      "type": "capsule",
+      "name": "Cápsula estival",
+      "author": "Pulsar Studio",
+      "category": "capsules",
+      "image": {
+        "src": "art/item-7.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Cápsula estival",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 1.99,
+        "currency": "USD"
+      },
+      "tags": [
+        "aleatorio",
+        "verano"
+      ],
+      "description": "Cápsula estival: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 479,
+      "rating": 4.3,
+      "updatedAt": "2026-08-17T10:00:00Z",
+      "versions": []
+    },
+    {
+      "id": "item-08-capsula-minera",
+      "type": "capsule",
+      "name": "Cápsula minera",
+      "author": "Pulsar Studio",
+      "category": "capsules",
+      "image": {
+        "src": "art/item-8.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Cápsula minera",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 1.99,
+        "currency": "USD"
+      },
+      "tags": [
+        "aleatorio",
+        "cueva"
+      ],
+      "description": "Cápsula minera: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 1816,
+      "rating": 3.6,
+      "updatedAt": "2026-08-18T10:00:00Z",
+      "versions": []
+    },
+    {
+      "id": "item-09-islas-flotantes",
+      "type": "world",
+      "name": "Islas flotantes",
+      "author": "Atlas",
+      "category": "worlds",
+      "image": {
+        "src": "art/item-9.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Islas flotantes",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": true
+      },
+      "tags": [
+        "supervivencia",
+        "aventura"
+      ],
+      "description": "Islas flotantes: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 3153,
+      "rating": 4.3,
+      "updatedAt": "2026-08-19T10:00:00Z",
+      "versions": [
+        "26.2"
+      ]
+    },
+    {
+      "id": "item-10-cumbres",
+      "type": "world",
+      "name": "Cumbres",
+      "author": "Atlas",
+      "category": "worlds",
+      "image": {
+        "src": "art/item-10.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Cumbres",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 5.99,
+        "currency": "USD"
+      },
+      "tags": [
+        "parkour",
+        "nieve"
+      ],
+      "description": "Cumbres: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 4490,
+      "rating": 3.6,
+      "updatedAt": "2026-08-20T10:00:00Z",
+      "versions": []
+    },
+    {
+      "id": "item-11-capa-meridiano",
+      "type": "cape",
+      "name": "Capa Meridiano",
+      "author": "Nébula",
+      "category": "capes",
+      "image": {
+        "src": "art/item-11.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Capa Meridiano",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 2.99,
+        "currency": "USD"
+      },
+      "tags": [
+        "capa",
+        "geométrica"
+      ],
+      "description": "Capa Meridiano: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 5827,
+      "rating": 4.3,
+      "updatedAt": "2026-08-21T10:00:00Z",
+      "versions": []
+    },
+    {
+      "id": "item-12-mochila-de-explorador",
+      "type": "cosmetic",
+      "name": "Mochila de explorador",
+      "author": "Comunidad",
+      "category": "cosmetics",
+      "image": {
+        "src": "art/item-12.svg",
+        "width": 320,
+        "height": 320,
+        "alt": "Arte de Mochila de explorador",
+        "dominant": "#3a3a3a"
+      },
+      "price": {
+        "free": false,
+        "amount": 2.49,
+        "currency": "USD"
+      },
+      "tags": [
+        "mochila"
+      ],
+      "description": "Mochila de explorador: ejemplo de catálogo. El backend real sustituirá este texto. Compatible con la última versión.",
+      "installs": 7164,
+      "rating": 3.6,
+      "updatedAt": "2026-08-22T10:00:00Z",
+      "versions": [
+        "26.2"
+      ]
+    }
+  ]
+}

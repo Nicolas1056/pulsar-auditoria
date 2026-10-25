@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulsar Launcher</title>
+    <script>
+      // Tema antes del primer pintado (sin parpadeo): ?theme=, luego la última preferencia conocida, luego el sistema.
+      (function () {
+        var q = new URLSearchParams(location.search).get("theme");
+        var saved = localStorage.getItem("pulsar.theme");
+        var pref = q === "dark" || q === "light" ? q : saved;
+        var dark = pref === "dark" ? true : pref === "light" ? false : matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-CIJv8hYu.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DJV3Waf_.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Galería de desarrollo (?screen=): los errores se vuelcan en la página para verlos en capturas headless.
+      if (new URLSearchParams(location.search).has("screen")) {
+        var settle = new URLSearchParams(location.search).get("settle");
+        if (settle) { var hold = new Image(); hold.src = "/__sleep?ms=" + settle; }   // retrasa load para capturas de estados asíncronos
+        var log = function (m) { var pre = document.getElementById("devlog") || document.body.appendChild(Object.assign(document.createElement("pre"), { id: "devlog", style: "position:fixed;left:0;bottom:0;max-height:40%;overflow:auto;margin:0;padding:8px;font:12px monospace;background:#300;color:#fff;z-index:99;white-space:pre-wrap" })); pre.textContent += m + "\n"; };
+        window.addEventListener("error", function (e) { log("error: " + e.message + " @ " + e.filename + ":" + e.lineno); });
+        window.addEventListener("unhandledrejection", function (e) { log("rejection: " + (e.reason && (e.reason.stack || e.reason.message || JSON.stringify(e.reason)))); });
+        var ce = console.error; console.error = function () { log("console.error: " + Array.from(arguments).map(String).join(" ")); ce.apply(console, arguments); };
+      }
+    </script>
+  </body>
+</html>

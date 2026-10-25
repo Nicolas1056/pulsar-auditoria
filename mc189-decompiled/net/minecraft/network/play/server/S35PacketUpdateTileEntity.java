@@ -1,0 +1,53 @@
+package net.minecraft.network.play.server;
+
+import java.io.IOException;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.INetHandlerPlayClient;
+import net.minecraft.util.BlockPos;
+
+public class S35PacketUpdateTileEntity implements Packet<INetHandlerPlayClient> {
+   private BlockPos a;
+   private int b;
+   private NBTTagCompound c;
+
+   public S35PacketUpdateTileEntity() {
+   }
+
+   public S35PacketUpdateTileEntity(BlockPos var1, int var2, NBTTagCompound var3) {
+      this.a = var1;
+      this.b = var2;
+      this.c = var3;
+   }
+
+   @Override
+   public void a(PacketBuffer var1) throws IOException {
+      this.a = var1.c();
+      this.b = var1.readUnsignedByte();
+      this.c = var1.h();
+   }
+
+   @Override
+   public void b(PacketBuffer var1) throws IOException {
+      var1.a(this.a);
+      var1.writeByte((byte)this.b);
+      var1.a(this.c);
+   }
+
+   public void a(INetHandlerPlayClient var1) {
+      var1.a(this);
+   }
+
+   public BlockPos a() {
+      return this.a;
+   }
+
+   public int b() {
+      return this.b;
+   }
+
+   public NBTTagCompound c() {
+      return this.c;
+   }
+}

@@ -1,0 +1,5 @@
+# Pulsar Launcher, un solo ratón por partida (spec 0058 §5).
+# El usuario con la sesión gráfica activa puede LEER ratones y paneles táctiles (uaccess, como las cámaras o los mandos).
+# Nunca un teclado: un nodo que también es teclado queda fuera. Va antes de 73-seat-late.rules, que aplica uaccess.
+SUBSYSTEM=="input", KERNEL=="event*", ENV{ID_INPUT_KEYBOARD}!="1", ENV{ID_INPUT_MOUSE}=="1", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ENV{ID_INPUT_KEYBOARD}!="1", ENV{ID_INPUT_TOUCHPAD}=="1", TAG+="uaccess"

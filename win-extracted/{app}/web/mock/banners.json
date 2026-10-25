@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-22T18:00:00Z",
+  "items": [
+    {
+      "id": "wallpaper-1",
+      "title": "",
+      "subtitle": "",
+      "image": {
+        "src": "wallpapers/1.jpg",
+        "width": 1920,
+        "height": 1080,
+        "alt": "Minecraft · The Wild Update",
+        "dominant": "#1b2430"
+      },
+      "action": {
+        "type": "profile",
+        "value": "26.2",
+        "label": "Jugar 26.2"
+      },
+      "publishedAt": "2026-08-23T12:00:00Z",
+      "priority": 100
+    },
+    {
+      "id": "wallpaper-2",
+      "title": "",
+      "subtitle": "",
+      "image": {
+        "src": "wallpapers/3.jpg",
+        "width": 1920,
+        "height": 1080,
+        "alt": "Minecraft · Nether Update",
+        "dominant": "#1b2430"
+      },
+      "action": {
+        "type": "profile",
+        "value": "26.2",
+        "label": "Jugar 26.2"
+      },
+      "publishedAt": "2026-08-23T12:00:00Z",
+      "priority": 99
+    },
+    {
+      "id": "wallpaper-3",
+      "title": "",
+      "subtitle": "",
+      "image": {
+        "src": "wallpapers/9.jpg",
+        "width": 1920,
+        "height": 1080,
+        "alt": "Minecraft · Trails & Tales",
+        "dominant": "#1b2430"
+      },
+      "action": {
+        "type": "profile",
+        "value": "26.2",
+        "label": "Jugar 26.2"
+      },
+      "publishedAt": "2026-08-23T12:00:00Z",
+      "priority": 98
+    },
+    {
+      "id": "wallpaper-4",
+      "title": "",
+      "subtitle": "",
+      "image": {
+        "src": "wallpapers/7.jpg",
+        "width": 1920,
+        "height": 1080,
+        "alt": "Minecraft · Village & Pillage",
+        "dominant": "#1b2430"
+      },
+      "action": {
+        "type": "profile",
+        "value": "26.2",
+        "label": "Jugar 26.2"
+      },
+      "publishedAt": "2026-08-23T12:00:00Z",
+      "priority": 97
+    },
+    {
+      "id": "wallpaper-5",
+      "title": "",
+      "subtitle": "",
+      "image": {
+        "src": "wallpapers/5.jpg",
+        "width": 1920,
+        "height": 1080,
+        "alt": "Minecraft · Ocean Monument",
+        "dominant": "#1b2430"
+      },
+      "action": {
+        "type": "profile",
+        "value": "26.2",
+        "label": "Jugar 26.2"
+      },
+      "publishedAt": "2026-08-23T12:00:00Z",
+      "priority": 96
+    }
+  ]
+}

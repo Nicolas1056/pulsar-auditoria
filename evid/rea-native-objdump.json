@@ -1,0 +1,14 @@
+{
+  "code": "VALIDATION_ERROR",
+  "message": "REA could not read the command arguments. Check the named argument and its expected type, then try again.",
+  "fieldErrors": [
+    {
+      "code": "invalid_value",
+      "missing": true,
+      "path": "operation",
+      "expected": "",
+      "received": "",
+      "message": "Invalid option: expected one of \"file_headers\"|\"section_headers\"|\"symbols\"|\"relocations\"|\"dwarf\"|\"disassemble\"|\"disassemble_all\""
+    }
+  ]
+}

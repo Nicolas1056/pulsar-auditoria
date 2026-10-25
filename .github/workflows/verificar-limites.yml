@@ -1,0 +1,44 @@
+name: Verificar límites de GitHub
+
+# GitHub rechaza ficheros de más de 100 MB y avisa a partir de 50 MB.
+# Este workflow falla si alguien vuelve a meter artefactos grandes.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  limites:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Comprobar ficheros > 100 MB (bloqueante en GitHub)
+        run: |
+          GRANDES=$(find . -type f -size +100M -not -path './.git/*' -printf '%s\t%p\n' | sort -rn || true)
+          if [ -n "$GRANDES" ]; then
+            echo "::error::Ficheros que GitHub rechazará (>100 MB):"
+            echo "$GRANDES" | awk -F'\t' '{printf "  %.0f MB  %s\n", $1/1048576, $2}'
+            echo ""
+            echo "Exclúyelos en .gitignore. Consulta README.md → 'Ficheros excluidos'."
+            exit 1
+          fi
+          echo "OK: ningún fichero supera 100 MB."
+
+      - name: Avisar de ficheros > 50 MB
+        run: |
+          MEDIOS=$(find . -type f -size +50M -size -100M -not -path './.git/*' -printf '%s\t%p\n' | sort -rn || true)
+          if [ -n "$MEDIOS" ]; then
+            echo "::warning::Ficheros grandes (>50 MB) — admitidos pero conviene revisarlos:"
+            echo "$MEDIOS" | awk -F'\t' '{printf "  %.0f MB  %s\n", $1/1048576, $2}'
+          fi
+
+      - name: Comprobar que no se cuelan secretos evidentes
+        run: |
+          if grep -rInE 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}' \
+               --exclude-dir=.git --exclude-dir=rea . 2>/dev/null | head -5; then
+            echo "::error::Posible credencial en el árbol."
+            exit 1
+          fi
+          echo "OK: sin credenciales evidentes."

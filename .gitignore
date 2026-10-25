@@ -1,0 +1,32 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Ficheros que GitHub RECHAZA (>100 MB). El push falla si se incluyen.
+# Ver README.md → "Ficheros excluidos del repositorio" para saber cómo obtenerlos.
+# ─────────────────────────────────────────────────────────────────────────────
+PulsarLauncher-setup.exe
+dist/PulsarLauncher-linux-x86_64.tar.gz
+dist/linux/**/libcef.so
+dist/linux/**/daemon/jre/lib/modules
+win-extracted/**/libcef.dll
+win-extracted/**/daemon/jre/lib/modules
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Regenerables / no forman parte del análisis
+# ─────────────────────────────────────────────────────────────────────────────
+.wine32/
+# clon de morluto/rea (118 MB, MIT): se obtiene con
+#   git clone https://github.com/morluto/rea.git
+rea/
+
+# Caches
+__pycache__/
+*.pyc
+*.class.tmp
+
+# Sistema
+.DS_Store
+Thumbs.db
+*~
+*.swp
+
+# Logs temporales
+*.err

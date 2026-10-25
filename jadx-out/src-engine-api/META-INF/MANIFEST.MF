@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Implementation-Title: Pulsar Client
+Implementation-Version: 0.2.26-beta
+Pulsar-Build: 0.2.26-beta+251415a16993
+

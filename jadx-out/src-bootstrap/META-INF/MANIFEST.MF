@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Premain-Class: com.metrofico.pulsar.bootstrap.legit.ClassWatch
+Can-Retransform-Classes: true
+

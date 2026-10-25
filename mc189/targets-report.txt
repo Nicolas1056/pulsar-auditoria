@@ -1,0 +1,5 @@
+@At targets totales          : 99
+  fuera del jar (LWJGL/JDK)  : 18
+  dentro del jar de MC       : 81
+    resueltos                : 81  (por herencia: 4)
+    NO resueltos             : 0
